@@ -87,6 +87,29 @@ func (c *Client) UserShow(uid string) (*UserRecord, error) {
 	return &userRec, nil
 }
 
+// Add a user, call FreeIPA user_add method
+func (c *Client) UserAdd(uid string, giveName string, sn string, cn string) (*UserRecord, error) {
+	options := map[string]interface{}{
+		"givenname": giveName,
+		"sn":        sn,
+		"cn":        cn,
+	}
+
+	res, err := c.rpc("user_add", []string{uid}, options)
+
+	if err != nil {
+		return nil, err
+	}
+
+	var userRec UserRecord
+	err = json.Unmarshal(res.Result.Data, &userRec)
+	if err != nil {
+		return nil, err
+	}
+
+	return &userRec, nil
+}
+
 // Update ssh public keys for user uid. Returns the fingerprints on success.
 func (c *Client) UpdateSSHPubKeys(uid string, keys []string) ([]string, error) {
 	options := map[string]interface{}{
