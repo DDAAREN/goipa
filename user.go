@@ -88,11 +88,12 @@ func (c *Client) UserShow(uid string) (*UserRecord, error) {
 }
 
 // Add a user, call FreeIPA user_add method
-func (c *Client) UserAdd(uid string, giveName string, sn string, cn string) (*UserRecord, error) {
+func (c *Client) UserAdd(uid string, giveName string, sn string, cn string, pwd string) (*UserRecord, error) {
 	options := map[string]interface{}{
-		"givenname": giveName,
-		"sn":        sn,
-		"cn":        cn,
+		"givenname":    giveName,
+		"sn":           sn,
+		"cn":           cn,
+		"userpassword": pwd,
 	}
 
 	res, err := c.rpc("user_add", []string{uid}, options)
